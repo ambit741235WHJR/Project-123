@@ -35,7 +35,7 @@ print('Accuracy: ', accuracy)
 # Starting the camera
 cap = cv2.VideoCapture(0)
 while (True):
-    #try:
+    try:
         # Capture frame-by-frame
         ret, frame = cap.read()
         # Our operations on the frame come here
@@ -60,17 +60,18 @@ while (True):
         image_bw_resized_inverted_scaled = np.clip(image_bw_resized_inverted-min_pixel, 0, 255)
         max_pixel = np.max(image_bw_resized_inverted)
         image_bw_resized_inverted_scaled = np.asarray(image_bw_resized_inverted_scaled)/max_pixel
-        test_sample = np.array(image_bw_resized_inverted_scaled).reshape(1, 784)
+        sized_sample = np.array(image_bw_resized_inverted_scaled).reshape(1, 784).ravel()
+        test_sample = np.array(sized_sample)[:660].reshape(1, 660)
         # Predicting the digit
         test_pred = clf.predict(test_sample)
         # Displaying the predicted digit
-        print('Predicted digit: ', test_pred[0])
+        print('Predicted alphabet: ', test_pred[0])
         # Displaying the resulting frame
         cv2.imshow('frame', gray)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
-    #except Exception as e:
-    #    pass
+    except Exception as e:
+        pass
 
 cap.release()
 cv2.destroyAllWindows()
